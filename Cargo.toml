@@ -1,0 +1,34 @@
+[package]
+name = "rust_defold_try"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bevy_app = "0.15.3"
+bevy_ecs = "0.15.3"
+bevy_math = "0.15.3"
+bevy_time = "0.15.3"
+bevy_transform = "0.15.3"
+indexmap-nostd = { version ="0.4.0", default-features = false }
+cty = { version = "0.2", default-features = false }
+no_std_strings = {version = "0.1.3", default-features = false }
+#nanoserde = { version = "0.2.*", default-features = false, features = ["json"] }
+serde-json-core = "0.6.0"
+serde = { version = "1.0", default-features = false, features = ["alloc", "derive"] }
+
+[build-dependencies]
+cbindgen = "0.28.*"
+bindgen = "0.71.*"
+cty = "0.2"  # For core::ffi compatibility
+
+[lib]
+crate-type = ["staticlib"]
+
+[profile.release]
+opt-level = "z"        # Максимальная оптимизация по размеру
+lto = "thin"           # Включаем Link-Time Optimization (LTO)
+codegen-units = 1      # Оптимизируем весь код вместе (медленнее компиляция, но меньше размер)
+strip = true           # Убираем символы отладки
+debug = false          # Отключаем отладочную информацию
+panic = "abort"        # Отключаем обработку паники, уменьшая размер бинарника
+incremental = false    # Отключаем инкрементную компиляцию в релизе (делает билд немного медленнее, но бинарник меньше)
